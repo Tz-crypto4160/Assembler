@@ -38,3 +38,7 @@ Given the input above, the program will output the corresponding 32-bit machine 
 00001000000000000000000000000000
 00000001000000000001000000100000
 
+## Note:
+This project was developed as part of the CS 315 (Computer Organization) course at Kalamazoo College.
+
+
