@@ -44,7 +44,7 @@ void pass2 (FILE * fp, LabelTableArrayList * table)
         if ( instrName == NULL )
             continue; /* Go to top of loop to read next line of input. */
 
-        /*printDebug ("First non-label token is: %s\n", instrName);
+        /*printDebug ("First non-label token is: %s\n", instrName);*/
 
         /* Determine whether this is an R-format, I-format, or J-format
          * instruction based on the opcode.  If it is an R-format
