@@ -1,92 +1,93 @@
-# A makefile for compiling the LabelTable test driver, a secondary test
-# driver that simulates pass 1 of an assembler, a test driver for testing
-# printing machine code components in binary, and the final assembler.
-# The makefile also compiles a simple tool (stripCR) for stripping Windows
-# carriage returns from assembler output for comparison with a provided
-# sample output file.
+# Directory settings
+SRC_DIR = src
 
 GCC=gcc -Wall -Wextra -Wpedantic -Wformat -Wshadow -Wredundant-decls \
-    -Wstrict-prototypes
-# Can also use -Wtraditional or -Wmissing-prototypes
+    -Wstrict-prototypes -I$(SRC_DIR)
 
-#  Switch to alternative version of the all target when working on assembler.
-# all:	testLabelTable testPass1
-all:	testLabelTable testPass1 testPrintAsBinary assembler stripCR
+all: testLabelTable testPass1 testPrintAsBinary assembler stripCR
 
-assembler.h:	LabelTableArrayList.h getToken.h \
-		printFuncs.h process_arguments.h names.h same.h
-	touch assembler.h
+# Helper for header dependency
+$(SRC_DIR)/assembler.h: $(SRC_DIR)/LabelTableArrayList.h $(SRC_DIR)/getToken.h \
+                        $(SRC_DIR)/printFuncs.h $(SRC_DIR)/process_arguments.h \
+                        $(SRC_DIR)/names.h $(SRC_DIR)/same.h
+	touch $(SRC_DIR)/assembler.h
 
-testLabelTable:	assembler.h \
-		LabelTableArrayList.c \
-		process_arguments.c \
-		printDebug.c \
-		printError.c \
-		same.c \
-		testLabelTable.c
-	$(GCC) -g process_arguments.c printDebug.c printError.c same.c \
-		LabelTableArrayList.c \
-	    	testLabelTable.c -o testLabelTable
+testLabelTable: $(SRC_DIR)/assembler.h \
+                $(SRC_DIR)/LabelTableArrayList.c \
+                $(SRC_DIR)/process_arguments.c \
+                $(SRC_DIR)/printDebug.c \
+                $(SRC_DIR)/printError.c \
+                $(SRC_DIR)/same.c \
+                $(SRC_DIR)/testLabelTable.c
+	$(GCC) -g $(SRC_DIR)/process_arguments.c $(SRC_DIR)/printDebug.c \
+		$(SRC_DIR)/printError.c $(SRC_DIR)/same.c \
+		$(SRC_DIR)/LabelTableArrayList.c \
+		$(SRC_DIR)/testLabelTable.c -o testLabelTable
 
-testPass1: 	assembler.h \
-		LabelTableArrayList.c \
-		process_arguments.c \
-		getToken.c \
-		pass1.c \
-		printDebug.c \
-		printError.c \
-		same.c \
-		testPass1.c
-	$(GCC) -g process_arguments.c printDebug.c printError.c same.c \
-		pass1.c getToken.c \
-		LabelTableArrayList.c \
-		testPass1.c -o testPass1
+testPass1: $(SRC_DIR)/assembler.h \
+           $(SRC_DIR)/LabelTableArrayList.c \
+           $(SRC_DIR)/process_arguments.c \
+           $(SRC_DIR)/getToken.c \
+           $(SRC_DIR)/pass1.c \
+           $(SRC_DIR)/printDebug.c \
+           $(SRC_DIR)/printError.c \
+           $(SRC_DIR)/same.c \
+           $(SRC_DIR)/testPass1.c
+	$(GCC) -g $(SRC_DIR)/process_arguments.c $(SRC_DIR)/printDebug.c \
+		$(SRC_DIR)/printError.c $(SRC_DIR)/same.c \
+		$(SRC_DIR)/pass1.c $(SRC_DIR)/getToken.c \
+		$(SRC_DIR)/LabelTableArrayList.c \
+		$(SRC_DIR)/testPass1.c -o testPass1
 
-testPrintAsBinary:	assembler.h \
-			printAsBinary.c \
-			LabelTableArrayList.c \
-			printDebug.c \
-			printError.c \
-			registerNames.c \
-			same.c \
-			testPrintAsBinary.c
-	$(GCC) -g process_arguments.c printDebug.c printError.c same.c \
-		LabelTableArrayList.c \
-		registerNames.c \
-		printAsBinary.c \
-		testPrintAsBinary.c -o testPrintAsBinary
+testPrintAsBinary: $(SRC_DIR)/assembler.h \
+                   $(SRC_DIR)/printAsBinary.c \
+                   $(SRC_DIR)/LabelTableArrayList.c \
+                   $(SRC_DIR)/printDebug.c \
+                   $(SRC_DIR)/printError.c \
+                   $(SRC_DIR)/registerNames.c \
+                   $(SRC_DIR)/same.c \
+                   $(SRC_DIR)/testPrintAsBinary.c
+	$(GCC) -g $(SRC_DIR)/process_arguments.c $(SRC_DIR)/printDebug.c \
+		$(SRC_DIR)/printError.c $(SRC_DIR)/same.c \
+		$(SRC_DIR)/LabelTableArrayList.c \
+		$(SRC_DIR)/registerNames.c \
+		$(SRC_DIR)/printAsBinary.c \
+		$(SRC_DIR)/testPrintAsBinary.c -o testPrintAsBinary
 
-assembler: 	assembler.h \
-		LabelTableArrayList.c \
-		process_arguments.c \
-		instructionNames.c \
-		registerNames.c \
-		getInstName.c \
-		getToken.c \
-		getNTokens.c \
-		pass1.c \
-		pass2.c \
-		printAsBinary.c \
-		printDebug.c \
-		printError.c \
-		same.c \
-		assembler.c
-	$(GCC) -g process_arguments.c printDebug.c printError.c same.c \
-		pass1.c pass2.c getToken.c getNTokens.c getInstName.c \
-		LabelTableArrayList.c \
-		instructionNames.c registerNames.c \
-		printAsBinary.c \
-		assembler.c -o assembler
+assembler: $(SRC_DIR)/assembler.h \
+           $(SRC_DIR)/LabelTableArrayList.c \
+           $(SRC_DIR)/process_arguments.c \
+           $(SRC_DIR)/instructionNames.c \
+           $(SRC_DIR)/registerNames.c \
+           $(SRC_DIR)/getInstName.c \
+           $(SRC_DIR)/getToken.c \
+           $(SRC_DIR)/getNTokens.c \
+           $(SRC_DIR)/pass1.c \
+           $(SRC_DIR)/pass2.c \
+           $(SRC_DIR)/printAsBinary.c \
+           $(SRC_DIR)/printDebug.c \
+           $(SRC_DIR)/printError.c \
+           $(SRC_DIR)/same.c \
+           $(SRC_DIR)/assembler.c
+	$(GCC) -g $(SRC_DIR)/process_arguments.c $(SRC_DIR)/printDebug.c \
+		$(SRC_DIR)/printError.c $(SRC_DIR)/same.c \
+		$(SRC_DIR)/pass1.c $(SRC_DIR)/pass2.c $(SRC_DIR)/getToken.c \
+		$(SRC_DIR)/getNTokens.c $(SRC_DIR)/getInstName.c \
+		$(SRC_DIR)/LabelTableArrayList.c \
+		$(SRC_DIR)/instructionNames.c $(SRC_DIR)/registerNames.c \
+		$(SRC_DIR)/printAsBinary.c \
+		$(SRC_DIR)/assembler.c -o assembler
 
-stripCR:	assembler.h \
-		process_arguments.h \
-		printDebug.c \
-		printError.c \
-		process_arguments.c \
-		same.c \
-		stripCR.c
-	$(GCC) -g process_arguments.c printDebug.c printError.c same.c \
-		stripCR.c -o stripCR
+stripCR: $(SRC_DIR)/assembler.h \
+         $(SRC_DIR)/process_arguments.h \
+         $(SRC_DIR)/printDebug.c \
+         $(SRC_DIR)/printError.c \
+         $(SRC_DIR)/process_arguments.c \
+         $(SRC_DIR)/same.c \
+         $(SRC_DIR)/stripCR.c
+	$(GCC) -g $(SRC_DIR)/process_arguments.c $(SRC_DIR)/printDebug.c \
+		$(SRC_DIR)/printError.c $(SRC_DIR)/same.c \
+		$(SRC_DIR)/stripCR.c -o stripCR
 
-clean: 
+clean:
 	rm -rf testLabelTable testPass1 testPrintAsBinary assembler stripCR
